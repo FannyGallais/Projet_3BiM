@@ -9,8 +9,8 @@ int main (int argc, char* argv[])
   output = fopen("gompertz.txt","w");
   double tumor_size = 1;
   double tumor_evo;
-  double a = 1;
-  double b = 20;
+  double a = 1;         // grow speed
+  double b = 20;        // maximum size
   double step = 0.001;
   double i;
 
