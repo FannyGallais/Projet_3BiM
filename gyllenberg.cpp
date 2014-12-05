@@ -1,4 +1,15 @@
-/* In this model, if mu = 0, quiescent cells and necrosed (dead) cells both fall under the 'quiescent' category
+/* 
+-------------------------------------------------------------------------------------------------------------
+Gyllenberg-Webb
+-------------------------------------------------------------------------------------------------------------
+dpc = [b - ro(tc)]*pc + ri(tc)*qc
+dqc = ro(tc)*pc - [ri(tc) + mu]*qc
+tc = pc + qc;
+-------------------------------------------------------------------------------------------------------------
+
+
+
+In this model, if mu = 0, quiescent cells and necrosed (dead) cells both fall under the 'quiescent' category
 */
 
 
@@ -20,6 +31,7 @@ int main (int argc, char* argv[])
 
   FILE* output;
   output = fopen("gyllenberg.txt","w");
+
   double ipc = 1;          // initial number of proliferating cells
   double iqc = 1;          // initial number of quiescent cells
   double itc = ipc + iqc;  // initial total number of cells
@@ -31,15 +43,16 @@ int main (int argc, char* argv[])
 
 
   // implicit parameters if using gompertz or verhuslt as the ro function
-  double alpha = 0.1;    // growth factor
-  double teta = 100;     // maximum tumor size
+  double alpha = 0.1;       // growth factor
+  double teta = 1000000;     // maximum tumor size
 
 
   double b;              // effective growth factor (births - deaths)
   double mu = 0;         // death rate of quiescent cells (equals 0 if quiescent cells and necrosed (dead) cells both fall under the 'quiescent' category)
 
-  double step = 0.01;
+  double step = 0.001;
   double i;
+  double length = 80;    // simulation length
 
 
   // specific parameter initialization
@@ -48,7 +61,7 @@ int main (int argc, char* argv[])
   b = alpha * (itc/ipc) * log(teta/itc);
 
 
-  for (i=0;i<100;i+=step)
+  for (i=0;i<length;i+=step)
     {
       dpc = pc * (b - ro_evaluate(tc,b,alpha,teta)) + qc * ri_evaluate(tc);
       dqc = pc * ro_evaluate(tc,b,alpha,teta) - qc * (mu + ri_evaluate(tc));
